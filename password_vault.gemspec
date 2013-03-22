@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = PasswordVault::VERSION
   spec.authors       = ["Jon Druse"]
   spec.email         = ["jon@jondruse.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{CLI Password Vault}
+  spec.summary       = %q{CLI Password Vault}
   spec.homepage      = ""
   spec.license       = "MIT"
 
