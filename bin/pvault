@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'commander/import'
+require 'password_vault'
+
+program :version, '0.0.1'
+program :description, 'store your passwords safely'
+
+command :list do |c|
+  c.syntax = 'Password Vault list'
+  c.summary = 'List your stored passwords'
+  c.action do |args, options|
+    p = ask("Password:  ") { |q| q.echo = false }
+
+    PasswordVault::Vault.new(p)
+
+  end
+end
+
+command :copy do |c|
+  c.syntax = 'Password Vault copy [options]'
+  c.summary = ''
+  c.description = ''
+  c.example 'description', 'command example'
+  c.option '--some-switch', 'Some switch that does something'
+  c.action do |args, options|
+    # Do something or c.when_called Password vault::Commands::Copy
+  end
+end
+
+command :add do |c|
+  c.syntax = 'Password Vault add [options]'
+  c.summary = ''
+  c.description = ''
+  c.example 'description', 'command example'
+  c.option '--some-switch', 'Some switch that does something'
+  c.action do |args, options|
+    # Do something or c.when_called Password vault::Commands::Add
+  end
+end
+
+command :remove do |c|
+  c.syntax = 'Password Vault remove [options]'
+  c.summary = ''
+  c.description = ''
+  c.example 'description', 'command example'
+  c.option '--some-switch', 'Some switch that does something'
+  c.action do |args, options|
+    # Do something or c.when_called Password vault::Commands::Remove
+  end
+end
+
