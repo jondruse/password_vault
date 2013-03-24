@@ -99,7 +99,7 @@ command :main do |c|
           puts "you must supply exaclty one name to update"
         end
       when "help"
-
+        puts "commands are: list, add, copy NAME, update NAME, delete NAME, quit"
       else
         puts "#{c}: does not compute"
       end
