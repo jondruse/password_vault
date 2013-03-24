@@ -3,7 +3,7 @@
 require 'rubygems'
 require 'commander/import'
 require 'terminal-table'
-require 'blip'
+require 'clipboard'
 require 'password_vault'
 
 program :version, '0.0.1'
@@ -29,6 +29,7 @@ command :main do |c|
       vault.read
     rescue
       puts "you shall not pass!"
+      exit
     end
 
     puts "type 'help' to see a list of commands"
@@ -42,10 +43,7 @@ command :main do |c|
 
       case c
       when "list"
-
         rows = []
-        rows << ["Name","Username","URL"]
-
         vault.passwords.each do |p|
           rows << [
             p.name,
@@ -54,30 +52,54 @@ command :main do |c|
           ]
         end
 
-        table = Terminal::Table.new :rows => rows
+        table = Terminal::Table.new headings: ["Name","Username","URL"], rows: rows
         puts table
       when "add"
         p = PasswordVault::Password.new
         p.name = ask("Name:  ")
-        p.password = ask("Password:  ") { |q| q.echo = false }
-        p.username = ask("Username:  ")
-        p.url = ask("URL:  ")
 
-        vault.passwords << p
+        if vault.get_password(p.name)
+          puts "entry for #{p.name} already exists, use 'update'"
+        else
+          p.password = ask("Password:  ") { |q| q.echo = false }
+          p.username = ask("Username:  ")
+          p.url = ask("URL:  ")
 
-        vault.write
+          vault.passwords << p
 
-        puts "added #{p.name} to vault"
+          vault.write
+
+          puts "added #{p.name} to vault"
+        end
       when "copy"
         if input.size == 2
           p = vault.get_password(input.last)
-
-
+          Clipboard.copy(p.password)
+          puts "password for #{p.name} copied to your clipboard"
         else
           puts "you must supply exaclty one name to copy"
         end
       when "delete"
+        if input.size == 2
+          vault.delete_password(input.last)
+          vault.write
+          puts "deleted #{input.last}"
+        else
+          puts "you must supply exaclty one name to delete"
+        end
       when "update"
+        if input.size == 2
+          p = vault.get_password(input.last)
+          p.name = ask("Name:  ")
+          p.password = ask("Password:  ") { |q| q.echo = false }
+          p.username = ask("Username:  ")
+          p.url = ask("URL:  ")
+          vault.write
+        else
+          puts "you must supply exaclty one name to update"
+        end
+      when "help"
+
       else
         puts "#{c}: does not compute"
       end

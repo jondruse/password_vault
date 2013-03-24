@@ -16,6 +16,12 @@ class PasswordVault::Vault
     found.first
   end
 
+  def delete_password(name)
+    if p = get_password(name)
+      @passwords -= [p]
+    end
+  end
+
   def write
     File.open(PasswordVault::VaultFile, 'w') {|f| f.write(lock) }
   end

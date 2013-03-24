@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.add_dependency "commander"
   spec.add_dependency "terminal-table"
-  spec.add_dependency "blip"
+  spec.add_dependency "clipboard"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"

@@ -15,7 +15,7 @@ describe PasswordVault::Vault do
     vault
   }
 
-  it "should have 0 passwords" do
+  it "new files should have 0 passwords" do
     vault.passwords.size.should == 0
   end
 
@@ -29,6 +29,16 @@ describe PasswordVault::Vault do
 
   it "should retrieve passwords by name" do
     vp.get_password("nothere").should be_nil
+    vp.get_password("twitter").class.should == PasswordVault::Password
+  end
+
+  it "should delete a password" do
+    vp.delete_password("nothere").should be_nil
+
+    size = vp.passwords.size
+    vp.delete_password("twitter")
+
+    vp.passwords.size.should == (size-1)
   end
 
   it "should marshal dump/load" do
@@ -51,6 +61,7 @@ describe PasswordVault::Vault do
   end
 
   it "should write/read to/from a file" do
+    pending "fakefs not working?"
     File.exists?(PasswordVault::VaultFile).should be_false
     vp.write
     File.exists?(PasswordVault::VaultFile).should be_true
