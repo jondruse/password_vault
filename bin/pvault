@@ -74,6 +74,10 @@ command :main do |c|
       when "copy"
         if input.size == 2
           p = vault.get_password(input.last)
+          if p.nil?
+            puts "couldn't find password with name #{input.last}"
+            redo
+          end
           Clipboard.copy(p.password)
           puts "password for #{p.name} copied to your clipboard"
         else
@@ -90,6 +94,12 @@ command :main do |c|
       when "update"
         if input.size == 2
           p = vault.get_password(input.last)
+
+          if p.nil?
+            puts "couldn't find password with name #{input.last}"
+            redo
+          end
+
           p.name = ask("Name:  ")
           p.password = ask("Password:  ") { |q| q.echo = false }
           p.username = ask("Username:  ")
