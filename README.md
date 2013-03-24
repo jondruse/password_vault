@@ -1,24 +1,19 @@
 # PasswordVault
 
-TODO: Write a gem description
+Really simple CLI for storing passwords securely.
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'password_vault'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
 
     $ gem install password_vault
 
 ## Usage
 
-TODO: Write usage instructions here
+Run pvault to interact with your Vault
+
+Here's an example:
+
+![Example](https://www.evernote.com/shard/s9/sh/2ae7fdfc-1dba-40da-a265-c002acbcb299/82e34f321ea2740330831af5344fc8df/res/10639cfa-b442-4125-a521-246eb8a1baf9/skitch.png)
+
 
 ## Contributing
 
