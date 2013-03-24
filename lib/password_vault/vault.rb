@@ -1,4 +1,5 @@
 require 'openssl'
+require 'fileutils'
 
 class PasswordVault::Vault
 
@@ -10,8 +11,13 @@ class PasswordVault::Vault
     @passwords ||= []
   end
 
+  def get_password(name)
+    found = @passwords.select {|p| p.name == name }
+    found.first
+  end
+
   def write
-    File.open(PasswordVault::VaultFile, 'wb') {|f| f.write(lock) }
+    File.open(PasswordVault::VaultFile, 'w') {|f| f.write(lock) }
   end
 
   def read

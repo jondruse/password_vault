@@ -2,10 +2,6 @@ require 'spec_helper'
 require 'fakefs'
 
 describe PasswordVault::Vault do
-  it 'should exist' do
-    defined?(PasswordVault::Vault).should == "constant"
-  end
-
   let(:vault) {PasswordVault::Vault.new('mykey')}
   let(:twitter) {
     p          = PasswordVault::Password.new
@@ -29,6 +25,10 @@ describe PasswordVault::Vault do
     vault.passwords << twitter
 
     vault.passwords.size.should == 1
+  end
+
+  it "should retrieve passwords by name" do
+    vp.get_password("nothere").should be_nil
   end
 
   it "should marshal dump/load" do

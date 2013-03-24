@@ -1,3 +1,3 @@
 module PasswordVault
-  VaultFile = "#{ENV["home"]}/.password_vault"
+  VaultFile = "#{ENV["HOME"]}/.password_vault"
 end

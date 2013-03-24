@@ -2,52 +2,87 @@
 
 require 'rubygems'
 require 'commander/import'
+require 'terminal-table'
+require 'blip'
 require 'password_vault'
 
 program :version, '0.0.1'
 program :description, 'store your passwords safely'
 
-command :list do |c|
-  c.syntax = 'Password Vault list'
-  c.summary = 'List your stored passwords'
-  c.action do |args, options|
-    p = ask("Password:  ") { |q| q.echo = false }
+default_command :main
 
-    PasswordVault::Vault.new(p)
+command :main do |c|
+  c.syntax = 'Password Vault'
+  c.summary = 'Interact with your password vault'
+  c.action do |args, options|
+    if !File.exists?(PasswordVault::VaultFile)
+      p = ask("Please enter a password for your vault:  ") {|q| q.echo = false }
+      vault = PasswordVault::Vault.new(p)
+      vault.write
+      vault.read
+    else
+      p = ask("Password:  ") { |q| q.echo = false }
+      vault = PasswordVault::Vault.new(p)
+    end
+
+    begin
+      vault.read
+    rescue
+      puts "you shall not pass!"
+    end
+
+    puts "type 'help' to see a list of commands"
+    loop do
+      input = ask_for_array("> ")
+      c = input.first
+
+      if %w(quit q).include?(c)
+        break
+      end
+
+      case c
+      when "list"
+
+        rows = []
+        rows << ["Name","Username","URL"]
+
+        vault.passwords.each do |p|
+          rows << [
+            p.name,
+            p.username,
+            p.url
+          ]
+        end
+
+        table = Terminal::Table.new :rows => rows
+        puts table
+      when "add"
+        p = PasswordVault::Password.new
+        p.name = ask("Name:  ")
+        p.password = ask("Password:  ") { |q| q.echo = false }
+        p.username = ask("Username:  ")
+        p.url = ask("URL:  ")
+
+        vault.passwords << p
+
+        vault.write
+
+        puts "added #{p.name} to vault"
+      when "copy"
+        if input.size == 2
+          p = vault.get_password(input.last)
+
+
+        else
+          puts "you must supply exaclty one name to copy"
+        end
+      when "delete"
+      when "update"
+      else
+        puts "#{c}: does not compute"
+      end
+    end
+
 
   end
 end
-
-command :copy do |c|
-  c.syntax = 'Password Vault copy [options]'
-  c.summary = ''
-  c.description = ''
-  c.example 'description', 'command example'
-  c.option '--some-switch', 'Some switch that does something'
-  c.action do |args, options|
-    # Do something or c.when_called Password vault::Commands::Copy
-  end
-end
-
-command :add do |c|
-  c.syntax = 'Password Vault add [options]'
-  c.summary = ''
-  c.description = ''
-  c.example 'description', 'command example'
-  c.option '--some-switch', 'Some switch that does something'
-  c.action do |args, options|
-    # Do something or c.when_called Password vault::Commands::Add
-  end
-end
-
-command :remove do |c|
-  c.syntax = 'Password Vault remove [options]'
-  c.summary = ''
-  c.description = ''
-  c.example 'description', 'command example'
-  c.option '--some-switch', 'Some switch that does something'
-  c.action do |args, options|
-    # Do something or c.when_called Password vault::Commands::Remove
-  end
-end
-
