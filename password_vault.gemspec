@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["jon@jondruse.com"]
   spec.description   = %q{CLI Password Vault}
   spec.summary       = %q{CLI Password Vault}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/jondruse/password_vault"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
